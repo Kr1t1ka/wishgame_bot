@@ -24,9 +24,9 @@ choose_sex.add(men_btn, women_btn)
 
 
 async def go_to_posts(user_id):
-	url = await create_payment(user_id)
-	go_to_posts = InlineKeyboardMarkup()
-	pay_btn = InlineKeyboardButton(text=lang.pay_btn, url=url)
-	check_btn = InlineKeyboardButton(text=lang.check_btn, callback_data="check_payment")
-	go_to_posts.add(pay_btn).add(check_btn)
-	return go_to_posts
+    url = await create_payment(user_id)
+    go_to_posts = InlineKeyboardMarkup()
+    pay_btn = InlineKeyboardButton(text=lang.pay_btn, url=url)
+    check_btn = InlineKeyboardButton(text=lang.check_btn, callback_data="check_payment")
+    go_to_posts.add(pay_btn).add(check_btn)
+    return go_to_posts
