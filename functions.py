@@ -1,4 +1,6 @@
 # -*- coding: utf8 -*-
+import time
+
 from aiogram import Bot
 from config import TOKEN, am_time, pm_time, total_days
 from datetime import datetime
@@ -39,6 +41,7 @@ async def current_time():
     aioschedule.every().day.at('15:52').do(everyday_post, part_of_day='pm')
     # aioschedule.every(3).seconds.do(everyday_post, part_of_day='pm')
     while True:
+        print(str(datetime.now()))
         await aioschedule.run_pending()
         await asyncio.sleep(1)
 
