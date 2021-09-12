@@ -29,16 +29,16 @@ async def edit_message_text(chat_id, text, parse_mode='HTML', disable_web_page_p
 
 
 async def current_time():
-    # aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
-    # aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:45').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:46').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:47').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:48').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:49').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:50').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:51').do(everyday_post, part_of_day='pm')
-    aioschedule.every().day.at('15:52').do(everyday_post, part_of_day='pm')
+    aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
+    aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:45').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:46').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:47').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:48').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:49').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:50').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:51').do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at('15:52').do(everyday_post, part_of_day='pm')
     # aioschedule.every(3).seconds.do(everyday_post, part_of_day='pm')
     while True:
         print(str(datetime.now()))
