@@ -27,8 +27,9 @@ async def edit_message_text(chat_id, text, parse_mode='HTML', disable_web_page_p
 
 
 async def current_time():
-    aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
-    aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
+    # aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
+    aioschedule.every(3).seconds.do(everyday_post, part_of_day='pm')
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
