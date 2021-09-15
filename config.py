@@ -1,6 +1,7 @@
 from enum import Enum
 
-TOKEN = '1849866111:AAH1EUYJup2t9WVApvLDeP93THHO9_ptpd4' # orign
+TOKEN = '1849866111:AAH1EUYJup2t9WVApvLDeP93THHO9_ptpd4'  # orign
+# TOKEN = '1965330272:AAG90BuPT0PfqhKr0_hW9YM0vMyXySDJF10'
 
 main_db = "db.db"
 
@@ -20,3 +21,4 @@ price = 377  # цена
 class States(Enum):
     START = "0"
     NAME = "1"
+    TIMEZOME = '2'

@@ -54,11 +54,32 @@ async def start_command(msg: types.Message):
 @dp.message_handler(lambda message: dbworker.get_current_state(message.chat.id) == States.NAME.value)
 async def name_command(msg: types.Message):
     chat_id = msg.chat.id
+    print(msg)
     try:
         await bot.delete_message(chat_id, msg.message_id)
     except Exception as e:
         print(e)
     dbworker.set_name(chat_id, msg.text)
+    await edit_message_text(chat_id, lang.time_zone)
+    dbworker.set_state(chat_id, States.TIMEZOME.value)
+
+
+# TIMEZONE
+@dp.message_handler(lambda message: dbworker.get_current_state(message.chat.id) == States.TIMEZOME.value)
+async def timezone_command(msg: types.Message):
+    chat_id = msg.chat.id
+    print(msg)
+    try:
+        await bot.delete_message(chat_id, msg.message_id)
+    except Exception as e:
+        print(e)
+
+    if msg.text.isdigit():
+        user_msg = int(msg.text)
+    else:
+        user_msg = msg.text
+
+    dbworker.set_time_zone(chat_id, user_msg)
     await edit_message_text(chat_id, lang.enter_sex, reply_markup=kb.choose_sex)
     dbworker.set_state(chat_id, States.START.value)
 
@@ -69,6 +90,8 @@ async def callback_inline(call):
     chat_id = call.message.chat.id
     msg_id = call.message.message_id
     if call.message:
+        # print(call.message)
+        # print(call.data)
         if call.data == 'before_rules':
             await edit_message_text(chat_id, lang.before_rules, reply_markup=kb.rules_kb)
         elif call.data == 'go_to_rules':
@@ -76,6 +99,7 @@ async def callback_inline(call):
         elif call.data == 'go_to_name':
             await edit_message_text(chat_id, lang.enter_name)
             dbworker.set_state(chat_id, States.NAME.value)
+
         elif call.data == 'male':
             dbworker.set_sex(chat_id, 'm')
             await edit_message_text(chat_id, lang.payment_text, reply_markup=await kb.go_to_posts(chat_id))

@@ -55,6 +55,20 @@ def get_sex(user_id):
         return data[0]
 
 
+def set_time_zone(user_id, time_zone):
+    if not isinstance(time_zone, int):
+        time_zone = 0
+    with sl.connect(main_db) as con:
+        con.execute('UPDATE USERS SET time_zone="{}" WHERE user_id={}'.format(time_zone, user_id))
+
+
+def get_time_zone(user_id):
+    with sl.connect(main_db) as con:
+        data = con.execute('SELECT time_zone FROM USERS WHERE user_id={}'.format(user_id)).fetchone()
+        print(data)
+        return data[0]
+
+
 def get_paid(user_id):
     with sl.connect(main_db) as con:
         data = con.execute('SELECT paid FROM USERS WHERE user_id={}'.format(user_id)).fetchone()
@@ -114,3 +128,5 @@ def get_last_msg_id(user_id):
 def set_last_msg_id(user_id, msg_id):
     with sl.connect(main_db) as con:
         con.execute('UPDATE USERS SET last_msg_id={} WHERE user_id={}'.format(msg_id, user_id))
+
+# print(get_time_zone(274347505))

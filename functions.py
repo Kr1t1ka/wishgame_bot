@@ -1,5 +1,6 @@
 # -*- coding: utf8 -*-
 import time
+from pprint import pprint
 
 from aiogram import Bot
 from config import TOKEN, am_time, pm_time, total_days
@@ -28,36 +29,42 @@ async def edit_message_text(chat_id, text, parse_mode='HTML', disable_web_page_p
         dbworker.set_last_msg_id(chat_id, message.message_id)
 
 
+def new_timer(time, time_zone):
+    tmp = time + time_zone
+    if tmp > 23:
+        tmp %= 24
+    return tmp
+
+
 async def current_time():
-    aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
-    aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:45').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:46').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:47').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:48').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:49').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:50').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:51').do(everyday_post, part_of_day='pm')
-    # aioschedule.every().day.at('15:52').do(everyday_post, part_of_day='pm')
-    # aioschedule.every(3).seconds.do(everyday_post, part_of_day='pm')
+    # aioschedule.every().day.at(am_time).do(everyday_post, part_of_day='am')
+    # aioschedule.every().day.at(pm_time).do(everyday_post, part_of_day='pm')
+    for i in range(0, 10):
+        am_time_tmp = f'{new_timer(int(am_time.split(":")[0]), i)}:00'
+        pm_time_tmp = f'{new_timer(int(pm_time.split(":")[0]), i)}:00'
+        aioschedule.every().day.at(am_time_tmp).do(everyday_post, part_of_day='am', time_zone=i)
+        aioschedule.every().day.at(pm_time_tmp).do(everyday_post, part_of_day='pm', time_zone=i)
+
+    pprint(aioschedule.jobs)
     while True:
-        print(str(datetime.now()))
+        # print(aioschedule.jobs)
         await aioschedule.run_pending()
         await asyncio.sleep(1)
 
 
-async def everyday_post(part_of_day):
+async def everyday_post(part_of_day, time_zone):
     user_ids = dbworker.get_user_ids_for_post()
     for user_id in user_ids:
-        day = await days_between(user_id[0])
-        print(f'user: {user_id} day: {day}')
-        if day > 0:
-            if day == 1:
-                last_msg_id = dbworker.get_last_msg_id(user_id[0])
-                try:
-                    await bot.delete_message(user_id[0], last_msg_id)
-                except Exception as e:
-                    print(e)
-            await post_today(user_id[0], part_of_day)
-        if day == total_days and part_of_day == 'pm':
-            dbworker.set_done(user_id[0])
+        if dbworker.get_time_zone(user_id) == time_zone:
+            day = await days_between(user_id[0])
+            print(f'user: {user_id} day: {day}')
+            if day > 0 or part_of_day == 'am':
+                if (day == 1) or (day == 0 and part_of_day == 'am'):
+                    last_msg_id = dbworker.get_last_msg_id(user_id[0])
+                    try:
+                        await bot.delete_message(user_id[0], last_msg_id)
+                    except Exception as e:
+                        print(e)
+                await post_today(user_id[0], part_of_day)
+            if day == total_days and part_of_day == 'pm':
+                dbworker.set_done(user_id[0])
