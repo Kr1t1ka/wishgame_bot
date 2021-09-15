@@ -37,17 +37,17 @@ async def check_payment(user_id):
     from_date = datetime.strptime(from_date, "%Y-%m-%d %H:%M:%S.%f")
     history = client.operation_history(label=user_id, from_date=from_date)
     print(history.operations)
-    if len(history.operations) > -1:
-        # operation = history.operations[0]
-        # status = operation.status
-        # if status == 'success':
-        dbworker.set_paid(user_id, True)
-        #     return True
-        # else:
-        #     return False
-    # else:
-    #     return False
-        return True
+    if len(history.operations) > 0:
+        operation = history.operations[0]
+        status = operation.status
+        if status == 'success':
+            dbworker.set_paid(user_id, True)
+            return True
+        else:
+            return False
+    else:
+        return False
+        # return True
 
 
 # check_payment(435375091)
