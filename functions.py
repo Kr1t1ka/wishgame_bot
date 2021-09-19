@@ -56,15 +56,15 @@ async def everyday_post(part_of_day, time_zone):
     user_ids = dbworker.get_user_ids_for_post()
     for user_id in user_ids:
         if dbworker.get_time_zone(user_id) == time_zone:
-            day = await days_between(user_id[0])
+            day = await days_between(user_id)
             print(f'user: {user_id} day: {day}')
             if day > 0 or part_of_day == 'am':
                 if (day == 1) or (day == 0 and part_of_day == 'am'):
-                    last_msg_id = dbworker.get_last_msg_id(user_id[0])
+                    last_msg_id = dbworker.get_last_msg_id(user_id)
                     try:
-                        await bot.delete_message(user_id[0], last_msg_id)
+                        await bot.delete_message(user_id, last_msg_id)
                     except Exception as e:
                         print(e)
-                await post_today(user_id[0], part_of_day)
+                await post_today(user_id, part_of_day)
             if day == total_days and part_of_day == 'pm':
-                dbworker.set_done(user_id[0])
+                dbworker.set_done(user_id)

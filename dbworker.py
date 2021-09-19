@@ -30,7 +30,8 @@ def create_state(user_id):
 def get_user_ids_for_post():
     with sl.connect(main_db) as con:
         data = con.execute('SELECT user_id FROM USERS WHERE paid=True and done=False').fetchall()
-        return data
+        res = [user_id[0] for user_id in data if user_id]
+        return res
 
 
 def set_name(user_id, name):
@@ -64,8 +65,7 @@ def set_time_zone(user_id, time_zone):
 
 def get_time_zone(user_id):
     with sl.connect(main_db) as con:
-        data = con.execute('SELECT time_zone FROM USERS WHERE user_id={}'.format(user_id)).fetchone()
-        print(data)
+        data = con.execute(f'SELECT time_zone FROM USERS WHERE user_id="{user_id}"').fetchone()
         return data[0]
 
 
@@ -129,4 +129,8 @@ def set_last_msg_id(user_id, msg_id):
     with sl.connect(main_db) as con:
         con.execute('UPDATE USERS SET last_msg_id={} WHERE user_id={}'.format(msg_id, user_id))
 
+
+# print(get_user_ids_for_post())
+# for i in get_user_ids_for_post():
+#     print(get_time_zone(i))
 # print(get_time_zone(274347505))
